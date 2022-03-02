@@ -1,10 +1,11 @@
 #! /bin/bash
 
-#the number of snapshots to retain is defined in the variable retention
+# The number of snapshots to retain is defined in the variable retention
 snap_prefix=snap
 retention=4
 
-#utilities used
+# Utilities used
+
 date=/bin/date
 grep=/usr/bin/grep
 sed=/usr/bin/sed
@@ -12,13 +13,15 @@ sort=/usr/bin/sort
 xargs=/usr/bin/xargs
 zfs=/sbin/zfs
 
-#variables used 
+# Variables used 
+
 src_0="new-pool/new-dataset"
 today="$snap_prefix-`date +%H%M`"
 snap_today="$src_0@$today"
 snap_old=`$zfs list -t snapshot -o name | $grep "$src_0@$snap_prefix*" | $sort -r | $sed 1,${retention}d | $xargs -n 1`
 
-#create snapshot( if it doesn't exists )
+# Create ZFS snapshot(if it doesn't exists )
+
 if $zfs list -H -o name -t snapshot | $grep "$snap_today" > /dev/null
 then
     echo "Today's snapshot '$snap_today' already exists."
@@ -29,7 +32,8 @@ fi
 
 echo "Attempting to destroy old snapshots..."
 
-#remove snapshot if older than $retention 
+# Remove snapshot if it's older than $retention 
+
 if [ -n "$snap_old" ]
 then
     echo "Destroying the following old snapshots:"
