@@ -28,7 +28,6 @@ Partition:
 Created a new pool:
 
 # sudo zpool create <pool_name> <drive1> <drive2>
-
 # sudo zpool create new-pool /dev/sda1 /dev/sda2
 
 --
