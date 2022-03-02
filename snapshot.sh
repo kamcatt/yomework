@@ -2,7 +2,7 @@
 
 # The number of snapshots to retain is defined in the variable retention
 snap_prefix=snap
-retention=4
+retention=3
 
 # Utilities used
 
