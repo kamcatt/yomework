@@ -1,0 +1,201 @@
+# $ [x] --help
+# $ help [x]
+# $ whatis [x]
+# $ man [x]
+# https://linuxjourney.com/
+# https://overthewire.org/wargames/
+******************************************
+
+Level 0 → Level 1
+
+$ ls
+$ cat readme
+
+--
+Level 1 → Level 2
+
+$ ls
+$ cat /home//-
+
+or
+
+$ cat < -
+
+--
+Level 2 → Level 3
+
+$ s
+$ cat spaces\ in\ this\ filename
+
+#typed "sp"+tab autocomplete 
+
+--
+Level 3 → Level 4
+
+$ ls
+$ cd inhere/
+$ ls -la
+$ cat .hidden
+
+--
+Level 4 → Level 5
+
+$ ls
+$ file inhere/*
+$ cat inhere/-file07
+
+--
+Level 5 → Level 6
+
+$ ls
+$ find . -size 1033c
+
+#$ find -type f -size 1033c | grep ASCII 
+
+--
+Level 6 → Level 7
+
+$ ls
+$ cd / 
+$ find -group  -user  -size 33c 2>/dev/null
+$ cat ./var/lib/dpkg/info/.password
+
+--
+Level 7 → Level 8
+
+$ ls
+$ cat data.txt | grep millionth
+
+--
+Level 8 → Level 9
+
+$ ls 
+$ sort data.txt | uniq -u
+
+--
+Level 9 → Level 10
+
+$ ls
+$ strings data.txt | grep ==
+
+--
+Level 10 → Level 11
+
+$ ls
+$ base64 -d data.txt
+
+--
+Level 11 → Level 12
+
+$ ls
+$ cat data.txt
+$ cat data.txt | tr a-z n-za-m | tr A-Z N-ZA-M
+
+--
+Level 12 → Level 13
+
+$ ls
+$ cp data.txt /tmp/memi92
+$ cd /tmp/memi92
+$ ls
+$ man xxd
+$ xxd -r data.txt > xdata.txt
+$ ls 
+$ file xdata.txt
+$ man gzip
+$ mv xdata.txt xdata.gz
+$ gunzip xdata.gz
+$ file xdata
+$ mv xdata xdata.bz2
+$ man bzip2
+$ bzip2 -d xdata.bz2
+$ file xdata
+$ mv xdata xdata.gz
+$ gunzip xdata.gz
+$ file xdata
+$ mv xdata xdata.tar
+$ man tar
+$ tar -xf xdata.tar
+$ ls
+$ mv data5.bin data5.tar
+$ tar -xf data5.tar
+$ file data6.bin
+$ bzip2 -d data6.bz2
+$ ls
+$ file data6
+$ mv data6 data6.tar
+$ tar -xf data6.tar
+$ ls
+$ file data8.bin
+$ mv data8.bin data8.gz
+$ gunzip data8.gz
+$ file data8
+$ cat data8
+
+--
+Level 13 → Level 14
+
+$ ls
+$ cat sshkey.private
+$ man ssh
+$ ssh bandit14@localhost -i sshkey.private
+$ cat /etc/bandit_pass/bandit14
+4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e
+
+--
+Level 14 → Level 15
+
+$ telnet localhost 30000
+4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e
+
+or
+
+$ echo 4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e | netcat localhost 30000
+
+--
+Level 15 → Level 16
+
+$ man openssl
+$ openssl s_client -connect localhost:30001 -ign_eof
+BfMYroe26WYalil77FoDi9qh59eK5xNr
+
+--
+Level 16 → Level 17
+
+$ man nmap
+$ nmap -v -A -T4 -p 31000-32000 localhost
+# $ nmap -p 31000-32000 localhost (this could also work)
+# 31960/tcp open  echo
+$ openssl s_client -connect localhost:3179
+cluFn7wTiGryunymYOu4RcffSxQluehd
+$ mkdir -p /tmp/bandit17
+$ cd /tmp/bandit17
+$ vim keye
+# created a new file and pasted the key
+$ chmod 400 keye
+$ ssh -i keye bandit17@localhost
+$ ls
+$ cat /etc/bandit_pass/bandit17
+
+--
+Level 17 → Level 18
+
+$ ls
+$ diff passwords.new  passwords.old
+
+--
+Level 18 → Level 19
+
+$ ssh -T bandit18@bandit.labs.overthewire.org -p 2220
+# IueksS7Ubh8G3DCwVzrTd8rAVOwq3M5x
+
+--
+Level 19 → Level 20
+
+$ ls 
+$ ./bandit20-do
+$ ./bandit20-do id
+$ ./bandit20-do cat /etc/bandit_pass/bandit20 
+
+--
+Level 20
