@@ -1,0 +1,54 @@
+#Spined up a new VM, this time installing both Docker & Docker-compose during the spin up
+
+#Used instructions to run Consul in an container 
+
+https://learn.hashicorp.com/tutorials/consul/docker-container-agents
+
+#Ran Vault in a container
+
+$ pull vault image
+$ docker run -d --rm --name vault-server --cap-add=IPC_LOCK -e 'VAULT_DEV_ROOT_TOKEN_ID=tdc-token' -e 'VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200' vault
+
+Ran inside the container: 
+
+$ export VAULT_ADDR='http://192.168.16.157:8200'
+
+#Accesed and added config files to Consul Web UI 
+
+#Created a new Nginx container( and a script) that pulls config files from Consul API: 
+
+#Dockerfile
+
+FROM ubuntu
+
+COPY script.sh script.sh
+RUN chmod +x /script.sh
+ENTRYPOINT ["./script.sh"]
+
+
+#Script 
+
+#!/bin/bash
+apt update
+apt install nginx -y
+apt install curl -y
+apt install jq -y
+useradd nginx
+usermod -a -G nginx nginx
+mkdir -p /run/nginx
+chown -R nginx:nginx /run/nginx
+chmod 775 /run/nginx
+curl http://192.168.16.157:8500/v1/kv/bookstack | jq -r '.[].Value' | base64 -d > /etc/nginx/conf.d/bookstack.conf
+curl http://192.168.16.157:8500/v1/kv/nginx | jq -r '.[].Value' | base64 -d > /etc/nginx/nginx.conf
+service nginx start
+while true
+do
+        sleep 1000
+done
+
+-----------------------
+#things left to be done: 
+
+-creating a docker hub account and uploading images there
+-creating a working Alpine image with Nginx that also pulls the config files( had to use an Ubuntu image)
+-data persistance for consul container > for config files 
