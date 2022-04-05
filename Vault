@@ -127,7 +127,8 @@ cat test.yomework.com.crt | jq -r .data.certificate > web-server/certs/test.yome
 cat test.yomework.com.crt | jq -r .data.issuing_ca >> web-server/certs/test.yomework.pem
 cat test.yomework.com.crt | jq -r .data.private_key > web-server/certs/test.yomework.key
 
-8. Spined up a new Nginx container 
+---------------------------------------
+8. Spined up a new Nginx container
 
 #added the test.yomework.key & test.yomework.pem in the /root/yomework/certs folder
 #added my own conf file yomework.conf to the /root/yomework/conf.d folder
@@ -136,5 +137,8 @@ docker run -v /root/yomework/certs:/etc/nginx/certs \
 -v /root/yomework/conf.d:/etc/nginx/conf.d  \
  --name test.yomework.com -p 80:80 -p 443:443 nginx &
  
+ ---------------------------------------
+ 9. Used the API to download the ROOT and INTERMEDIATE certificates and manually added them to the certmgr in Windows. 
  
- 
+ http://192.168.16.157:8200/v1/pki/ca
+ http://192.168.16.157:8200/v1/pki_int/ca
