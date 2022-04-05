@@ -129,6 +129,24 @@ cat test.yomework.com.crt | jq -r .data.certificate > web-server/certs/test.yome
 cat test.yomework.com.crt | jq -r .data.issuing_ca >> web-server/certs/test.yomework.pem
 cat test.yomework.com.crt | jq -r .data.private_key > web-server/certs/test.yomework.key
 
+#extracted the certificate, issuing ca in the pem file and private key in the key file seperately, through the API 
+
+curl --header "X-Vault-Token: $VAULT_TOKEN" \
+    --request POST \
+    --data '{"common_name": "test.yomework.com", "ttl": "24h"}' \
+    $VAULT_ADDR/v1/pki_int/issue/yomework-dot-com | jq -r .data.certificate > test.yomework.pem
+
+curl --header "X-Vault-Token: $VAULT_TOKEN" \
+    --request POST \
+    --data '{"common_name": "test.yomework.com", "ttl": "24h"}' \
+    $VAULT_ADDR/v1/pki_int/issue/yomework-dot-com | jq -r .data.issuing_ca >> test.yomework.pem
+
+
+curl --header "X-Vault-Token: $VAULT_TOKEN" \
+    --request POST \
+    --data '{"common_name": "test.yomework.com", "ttl": "24h"}' \
+    $VAULT_ADDR/v1/pki_int/issue/yomework-dot-com | jq -r .data.private_key > test.yomework.key
+
 ---------------------------------------
 8. Spined up a new Nginx container
 
