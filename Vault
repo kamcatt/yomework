@@ -80,6 +80,61 @@ vault write pki_int/roles/yomework-dot-com \
         max_ttl="720h"
 
 #vault delete pki_int/roles/yomework-dot-com
+---------------------------------------
+5. Create a new POLICY to create update revoke and list certificates
 
+vault policy write pki_int pki_int.hcl
 
-5. 
+---------------------------------------
+6. Creating USERNAME and password 
+
+export VAULT_ADDR=http://localhost:8200
+export VAULT_TOKEN=root
+export VAULT_NAMESPACE=
+export VAULT_USER="emi"
+export VAULT_PASSWORD="password"
+
+#enable userpass to create an authentication method for creating and managing certificates
+vault auth enable userpass
+
+#create a new username and password with the policy we created earlier
+vault write auth/userpass/users/${VAULT_USER} \
+    password=${VAULT_PASSWORD} \
+    token_policies="pki_int"
+
+#vault auth disable userpass
+---------------------------------------
+7. Generate certificate 
+
+export VAULT_ADDR=http://localhost:8200
+#set roleid and secretid as env variables from the previous step
+export VAULT_USER="emi"
+export VAULT_PASSWORD="password"
+
+vault login -format=json -method=userpass \
+    username=${VAULT_USER} \
+    password=${VAULT_PASSWORD} | jq -r .auth.client_token > user.token
+
+#store the token as env variable, now this token can be used to authenticate against Vault
+export VAULT_TOKEN=`cat user.token`
+
+#Use the new token to generate a new certificate and store it in a file
+vault write -format=json pki_int/issue/yomework-dot-com \
+    common_name=test.yomework.com > test.yomework.com.crt
+
+#extract the certificate, issuing ca in the pem file and private key in the key file seperately
+cat test.yomework.com.crt | jq -r .data.certificate > web-server/certs/test.yomework.pem
+cat test.yomework.com.crt | jq -r .data.issuing_ca >> web-server/certs/test.yomework.pem
+cat test.yomework.com.crt | jq -r .data.private_key > web-server/certs/test.yomework.key
+
+8. Spined up a new Nginx container 
+
+#added the test.yomework.key & test.yomework.pem in the /root/yomework/certs folder
+#added my own conf file yomework.conf to the /root/yomework/conf.d folder
+
+docker run -v /root/yomework/certs:/etc/nginx/certs \
+-v /root/yomework/conf.d:/etc/nginx/conf.d  \
+ --name test.yomework.com -p 80:80 -p 443:443 nginx &
+ 
+ 
+ 
