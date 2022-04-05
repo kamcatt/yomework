@@ -110,7 +110,6 @@ vault write auth/userpass/users/${VAULT_USER} \
 7. Generate certificate 
 
 export VAULT_ADDR=http://localhost:8200
-#set roleid and secretid as env variables from the previous step
 export VAULT_USER="emi"
 export VAULT_PASSWORD="password"
 
