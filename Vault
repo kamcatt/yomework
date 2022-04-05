@@ -1,0 +1,18 @@
+#Requierements 
+
+
+-configure Vault PKI 
+-generate certificate through the API 
+-add the certificate to nginx > initialy manually > through a wrapper script 
+
+****************************************************************************
+
+#Steps
+
+1. Spined up Vault docker container
+
+docker run --name demo-vault -p 8200:8200 vault \
+server -dev -dev-root-token-id="root" &
+
+---------------------------------------
+2. 
