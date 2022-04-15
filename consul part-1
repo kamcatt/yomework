@@ -51,4 +51,3 @@ done
 
 -creating a docker hub account and uploading images there
 -creating a working Alpine image with Nginx that also pulls the config files( had to use an Ubuntu image)
--data persistance for consul container > for config files 
